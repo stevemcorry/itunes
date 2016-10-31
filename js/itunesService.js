@@ -9,11 +9,42 @@ angular.module('itunes').service('itunesService', function($http, $q){
 
     //Code here
   this.getSongs = function(artist){
-    return $http({
+    var defer = $q.defer();
+  $http({
       method: 'JSONP',
       url: 'https://itunes.apple.com/search?term=' + artist + '&callback=JSON_CALLBACK'
+    })
+    .then(function(musicData){
+      var results = musicData.data.results;
+      var niceResult = [];
+      for(var x in results){
+        niceResult.push(new FormattedArtist(results[x]));
+      }
+        defer.resolve(niceResult);
     });
-  };
+    return defer.promise;
+ };
+
+
+  var FormattedArtist = function (artistInfo) {
+      this.AlbumArt = artistInfo.artworkUrl60;
+      this.Artist = artistInfo.artistName;
+      this.Collection = artistInfo.collectionName;
+      this.CollectionPrice = artistInfo.collectionPrice;
+      this.Play = artistInfo.previewUrl;
+      this.Type = artistInfo.kind;
+      this.TrackPrice = artistInfo.trackPrice;
+      this.Explicit = artistInfo.trackExplicitness;
+      this.Genre = artistInfo.primaryGenreName;
+      this.Song = artistInfo.trackName;
+
+    };
+
+
+// });
+
+
+
 
 
 

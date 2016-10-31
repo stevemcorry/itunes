@@ -20,10 +20,11 @@ angular.module('itunes').controller('mainCtrl', function($scope, itunesService){
 
   //First inject itunesService into your controller.
 $scope.getSongData = function() {
-  itunesService.getSongs($scope.artist).then(function(result) {
-    $scope.songData = result.data;
-  });
-  console.log($scope.songData);
+  itunesService.getSongs($scope.artist)
+  .then(function(stuff) {
+    console.log(stuff);
+    $scope.songData = stuff;
+    });
 };
 
   //Now write a function that will call the method on the itunesService that is responsible for getting the data from iTunes, whenever the user clicks the submit button
